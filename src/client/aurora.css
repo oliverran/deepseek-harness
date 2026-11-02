@@ -121,3 +121,5 @@ html[data-gh-theme] [class*='_userStack'] [class$='_bubble'] { background:var(--
 @media (prefers-reduced-motion:reduce) { [data-dsh-aurora] *, [data-dsh-aurora] *::before { scroll-behavior:auto; transition:none; animation:none; } }
 /* The host's collapsed navigation has its own opaque background. Keep its icons legible in all palettes. */
 html[data-gh-theme] [class*='_sidebarCol'] [class*='_quietBars'] { background:var(--gh-sidebar); color:var(--gh-ink); }
+
+[data-dsh-aurora] .gh-module-mark { display:flex; align-items:center; justify-content:center; flex:none; width:38px; height:38px; border-radius:10px; color:var(--gh-accent); background:var(--gh-selected); }

@@ -3,6 +3,7 @@ import { act, useState, type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
 import { afterEach, expect, it, vi } from 'vitest'
 import { ApiError, caller, usePoll } from '../src/client/api.ts'
+import { installApplicationTitle } from '../src/client/branding.tsx'
 import { apply } from '../src/client/index.tsx'
 import { zh } from '../src/client/locales.ts'
 import { SettingsSchema } from '../src/policy.ts'
@@ -10,7 +11,8 @@ import { SettingsSchema } from '../src/policy.ts'
 declare global { var IS_REACT_ACT_ENVIRONMENT: boolean }
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 
-type Entry = { options: { name: string; id?: string; key?: string; order?: number; locale?: string; label?: () => string }; component: ComponentType<Record<string, unknown>> }
+type Entry = { options: { name: string; id?: string; key?: string; order?: number; priority?: number; locale?: string; label?: () => string }; component: ComponentType<Record<string, unknown>> }
+const disposers: (() => void)[] = []
 const t = ((key: keyof typeof zh) => zh[key] ?? key) as never
 function fixture(listed: string[]) {
   const entries: Entry[] = []
@@ -18,7 +20,7 @@ function fixture(listed: string[]) {
   const ctx = {
     slots: { inject: (_name: string, register: () => void) => register(), register: (options: Entry['options'], component: Entry['component']) => { entries.push({ options, component }); return () => {} } },
     locale: { register: (ns: string, value: unknown) => { dictionaries[ns] = value; return () => {} }, bind: () => t },
-    effect: (effect: () => unknown) => { effect() },
+    effect: (effect: () => unknown) => { const dispose = effect(); if (typeof dispose === 'function') disposers.push(() => { dispose() }) },
     sessions: { list: { getSnapshot: () => ({ phase: 'ready', byId: Object.fromEntries(listed.map(id => [id, {}])) }) }, refresh: vi.fn(async () => {}) },
     uiWorkspace: { openSession: vi.fn() },
     // Omit config form service so Deployment renders read-only.
@@ -47,17 +49,17 @@ const serve = () => vi.stubGlobal('fetch', vi.fn(async (url: string) => {
     setup: { machine: { stateDir: '/srv/state', worktreeRoot: '/srv/state/worktrees', blockedCommands: [], promptMaxChars: 100000, admissionContextMaxPages: 10, admissionContextTimeoutMs: 15000 }, problem: null, feishuProblem: null, accounts: null } })
   return Response.json({ error: 'unavailable' }, { status: 503 })
 }))
-afterEach(() => { vi.unstubAllGlobals() })
+afterEach(() => { while (disposers.length) disposers.pop()!(); vi.unstubAllGlobals() })
 
 it('registers a localized main panel, sidebar entry and Plugin Manager row page, and no settings section', () => {
   const { entries, dictionaries, main, nav } = fixture([])
-  expect(entries.map(entry => entry.options.name)).toEqual(['main', 'sidebar.panellist', 'plugins.row.config'])
+  expect(entries.map(entry => entry.options.name)).toEqual(['sidebar.brand.mark', 'sidebar.brand.name', 'main', 'sidebar.panellist', 'plugins.row.config'])
   expect(entries.some(entry => entry.options.name === 'shell.overlay')).toBe(false)
   expect(entries.find(entry => entry.options.name === 'plugins.row.config')!.options).toMatchObject({ key: 'dsh-superagent#dsh-superagent', locale: 'dshSuperagent' })
   expect(Object.keys(dictionaries)).toEqual(['dshSuperagent'])
   expect(main.options).toMatchObject({ key: 'dsh-superagent', locale: 'dshSuperagent' })
   expect(nav.options).toMatchObject({ id: 'dsh-superagent', order: 10, locale: 'dshSuperagent' })
-  expect(nav.options.label?.()).toBe('guang harness')
+  expect(nav.options.label?.()).toBe('Superagent')
 })
 
 it('opens a listed Session through the workspace from the main panel', async () => {
@@ -143,4 +145,31 @@ it('tells a dsh-superagent that does not answer from a record it does not have, 
     status: 400, missing: false, unreachable: false })
   expect(await failure(async () => Response.json({ error: 'Unknown ticket', code: 'unknownTicket' }, { status: 404 }))).toEqual({
     message: 'user unknownTicket', status: 404, missing: true, unreachable: false })
+})
+
+
+it('brands the overall shell while retaining Superagent as a feature panel', async () => {
+  const { entries, nav } = fixture([])
+  const name = entries.find(entry => entry.options.name === 'sidebar.brand.name')!
+  // The official shell already occupies priority 0; deployment branding must coexist at its own priority.
+  expect(name.options.priority).toBe(-10)
+  expect(entries.find(entry => entry.options.name === 'sidebar.brand.mark')!.options.priority).toBe(-10)
+  const view = await render(name, {})
+  expect(view.container.textContent).toBe('guang harness')
+  expect(nav.options.label?.()).toBe('Superagent')
+  view.dispose()
+})
+
+it('keeps the application identity across ordinary session title changes and restores the host suffix on disposal', async () => {
+  document.title = 'First task — DeepSeek Harness'
+  const dispose = installApplicationTitle()
+  expect(document.title).toBe('First task — guang harness')
+  document.title = 'Another chat — DeepSeek Harness'
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(document.title).toBe('Another chat — guang harness')
+  document.title = 'DeepSeek Harness'
+  await new Promise(resolve => setTimeout(resolve, 0))
+  expect(document.title).toBe('guang harness')
+  dispose()
+  expect(document.title).toBe('DeepSeek Harness')
 })

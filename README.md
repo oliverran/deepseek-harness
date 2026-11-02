@@ -8,6 +8,8 @@
 
 本版本保存在 [oliverran/deepseek-harness 的 `codex/dsh-superagent` 分支](https://github.com/oliverran/deepseek-harness/tree/codex/dsh-superagent)，是独立 Superagent 项目。该仓库的 `master` 分支存放 Harness 主项目。
 
+应用整体名称为 **guang harness（GH）**，内置的 **Superagent** 功能栏目保留原名。GH 标识位于全局侧栏，Superagent 管理页使用自己的功能名称；普通对话与其他栏目同属 GH 应用。
+
 ## 主要功能
 
 - **GitHub 任务闭环**：接收请求、判断是否接单，为任务创建独立 Session 和执行目录，在原讨论中回复进展或交付 PR；可选接入飞书。

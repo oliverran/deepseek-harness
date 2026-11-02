@@ -176,8 +176,8 @@ function Pages({ route, openTab, deploymentForm }: { route: Route; openTab: (tab
   })()
   return <div className="gh-root"><div className="dt-page" data-gh-theme={theme}>
     <aside className="gh-sidebar" aria-label={t('brandNavigation')}>
-      <div className="gh-brand"><span className="gh-monogram" aria-hidden="true">GH</span>
-        <div><strong>guang harness</strong><span>GUANG SERIES</span></div></div>
+      <div className="gh-brand"><span className="gh-module-mark" aria-hidden="true"><Icon name="queue" size={22} /></span>
+        <div><strong>{t('panel')}</strong><span>GUANG HARNESS</span></div></div>
       <SegmentedTabs className="dt-tabs gh-navigation" label={t('pagesLabel')} value={topTab(route)} onChange={openTab}
         orientation="vertical"
         items={TABS.map(value => ({ value, label: t(`tab.${value}`), icon: <Icon name={value === 'overview' ? 'inbox'
@@ -186,7 +186,7 @@ function Pages({ route, openTab, deploymentForm }: { route: Route; openTab: (tab
         <strong>{setup?.accounts?.repository ?? t('empty')}</strong>
         <button type="button" className="dt-textlink" onClick={() => navigate({ page: 'source' })}>{t('workspaceConnection')}</button></div>
       <div className="gh-sidebar-footer"><span className="gh-account-mark" aria-hidden="true">{(setup?.accounts?.agent ?? 'G')[0]?.toUpperCase()}</span>
-        <div><strong>{setup?.accounts?.agent ?? 'guang harness'}</strong><span>{t(error ? 'connectionOffline' : state ? 'connectionOnline' : 'loading')}</span></div>
+        <div><strong>{setup?.accounts?.agent ?? 'Superagent'}</strong><span>{t(error ? 'connectionOffline' : state ? 'connectionOnline' : 'loading')}</span></div>
         <button type="button" className="gh-appearance-shortcut" aria-label={t('appearanceTitle')}
           onClick={() => navigate(settingsRoute('appearance'))}><Icon name="settings" size={17} /></button></div>
     </aside>
@@ -207,10 +207,6 @@ function Pages({ route, openTab, deploymentForm }: { route: Route; openTab: (tab
 /** Root panel component managing route history and shared panel state. */
 export function App({ t, openSession, deploymentForm }: AppProps) {
   const [location, setLocation] = useState(initialLocation)
-  useEffect(() => {
-    const previous = document.title; document.title = 'guang harness · GH'
-    return () => { if (document.title === 'guang harness · GH') document.title = previous }
-  }, [])
   useEffect(() => { remember(location) }, [location])
   // Preserve the last opened settings group across navigation so the Settings tab reopens at it.
   const move = useCallback((next: (current: Location) => Pick<Location, 'route' | 'stack'>) =>

@@ -1,10 +1,10 @@
 # 005 Panel
 
-Open **guang harness** in the DeepSeek Harness Web sidebar to supervise the agent. The panel prioritizes work that needs a person, then system health and history. This document builds on [000 Philosophy](000-philosophy.md) through [004 Prompts](004-prompts.md).
+Open **Superagent** in the DeepSeek Harness Web sidebar to supervise the agent. The panel prioritizes work that needs a person, then system health and history. This document builds on [000 Philosophy](000-philosophy.md) through [004 Prompts](004-prompts.md).
 
 ## Appearance and brand
 
-The interface uses the guang harness (GH) name, part of the GUANG series with guangcode. A vertical sidebar holds the four primary views and collapses to accessible icon buttons in narrow panes. Settings → Appearance offers Minimal light, Warm paper and Graphite focus. The choice applies immediately to the shell and portal controls, persists in this browser, and synchronizes across same-origin tabs without an agent configuration write or restart. Plugin identifiers, profiles, credential locations and the desktop bundle identifier remain stable.
+The application shell uses the guang harness (GH) identity, part of the GUANG series with guangcode. The sidebar brand slots and browser product-title suffix apply globally, including ordinary chats. The Superagent feature panel keeps its name and hammer icon. A vertical sidebar holds the four primary views and collapses to accessible icon buttons in narrow panes. Settings → Appearance offers Minimal light, Warm paper and Graphite focus. The choice applies immediately to the shell and portal controls, persists in this browser, and synchronizes across same-origin tabs without an agent configuration write or restart. Plugin identifiers, profiles, credential locations and the desktop bundle identifier remain stable.
 
 ## Three questions
 

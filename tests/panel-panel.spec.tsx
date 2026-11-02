@@ -160,6 +160,6 @@ it('supports vertical keyboard navigation and retains the GH brand while opening
   await settle()
   expect(document.querySelector('#dt-tab-execution')?.getAttribute('aria-selected')).toBe('true')
   await click('修复回归')
-  expect(document.querySelector('.gh-brand')?.textContent).toContain('guang harness')
+  expect(document.querySelector('.gh-brand')?.textContent).toContain('Superagent')
   expect(document.querySelector('.dt-page-title h2')?.textContent).toBe('修复回归')
 })

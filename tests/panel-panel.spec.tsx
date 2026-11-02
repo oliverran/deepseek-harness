@@ -124,3 +124,42 @@ it('keeps full prompts accessible under Advanced and restores that location afte
   await remount()
   expect(document.querySelector('.dt-record-nav [aria-current="page"]')?.textContent).toBe(zh.advancedPrompts)
 })
+
+it('switches all three palettes immediately, keeps the choice across remounts and leaves agent configuration untouched', async () => {
+  await mount()
+  await click(zh['tab.settings'])
+  await click(zh['settingsGroup.appearance'])
+  for (const theme of ['warm', 'dark', 'light'] as const) {
+    await click(zh[`theme.${theme}`])
+    expect(document.querySelector('.dt-page')?.getAttribute('data-gh-theme')).toBe(theme)
+    expect(localStorage.getItem('guang-harness/appearance')).toBe(theme)
+    expect(document.querySelector('.gh-theme-option[aria-pressed="true"]')?.textContent).toContain(zh[`theme.${theme}`])
+  }
+  await click(zh['theme.dark'])
+  await remount()
+  expect(document.querySelector('.dt-page')?.getAttribute('data-gh-theme')).toBe('dark')
+  expect(server.requests.filter(request => request.method === 'PUT' || request.method === 'POST')).toEqual([])
+})
+
+it('falls back from an obsolete theme and follows appearance changes from another browser tab', async () => {
+  localStorage.setItem('guang-harness/appearance', 'unknown-theme')
+  await mount()
+  expect(document.querySelector('.dt-page')?.getAttribute('data-gh-theme')).toBe('light')
+  await act(async () => {
+    localStorage.setItem('guang-harness/appearance', 'warm')
+    window.dispatchEvent(new StorageEvent('storage', { key: 'guang-harness/appearance', newValue: 'warm' }))
+  })
+  expect(document.querySelector('.dt-page')?.getAttribute('data-gh-theme')).toBe('warm')
+})
+
+it('supports vertical keyboard navigation and retains the GH brand while opening task details', async () => {
+  await mount()
+  const nav = document.querySelector<HTMLElement>('.gh-navigation')!
+  expect(nav.getAttribute('aria-orientation')).toBe('vertical')
+  await act(async () => { nav.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })) })
+  await settle()
+  expect(document.querySelector('#dt-tab-execution')?.getAttribute('aria-selected')).toBe('true')
+  await click('修复回归')
+  expect(document.querySelector('.gh-brand')?.textContent).toContain('guang harness')
+  expect(document.querySelector('.dt-page-title h2')?.textContent).toBe('修复回归')
+})

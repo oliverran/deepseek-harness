@@ -252,10 +252,10 @@ final class Companion: NSObject, NSApplicationDelegate {
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
             window.isReleasedWhenClosed = false
         }
-        panel.title = "DSH 鲸鱼娘"; panel.contentView = view; view.owner = self
+        panel.title = "guang harness · 鲸鱼娘"; panel.contentView = view; view.owner = self
         panel.acceptsMouseMovedEvents = true
         view.setAccessibilityElement(true); view.setAccessibilityRole(.button)
-        view.setAccessibilityLabel("DSH 鲸鱼娘，拖动换位置，点击打开互动菜单")
+        view.setAccessibilityLabel("guang harness · 鲸鱼娘，拖动换位置，点击打开互动菜单")
         bubble.ignoresMouseEvents = true
         if defaults.object(forKey: "x") != nil {
             panel.setFrameOrigin(NSPoint(x: defaults.double(forKey: "x"), y: defaults.double(forKey: "y")))
@@ -294,7 +294,7 @@ final class Companion: NSObject, NSApplicationDelegate {
     }
     func makeMenu() -> NSMenu {
         let menu = NSMenu()
-        let heading = NSMenuItem(title: "DSH 鲸鱼娘 · \(displayMood.label)", action: nil, keyEquivalent: ""); heading.isEnabled = false
+        let heading = NSMenuItem(title: "guang harness · 鲸鱼娘 · \(displayMood.label)", action: nil, keyEquivalent: ""); heading.isEnabled = false
         menu.addItem(heading); menu.addItem(.separator())
         menu.addItem(menuItem("🍚 喂白饭", #selector(feed)))
         menu.addItem(menuItem(sleeping ? "☀️ 叫醒" : "🌙 休息（后台任务继续）", #selector(toggleSleep)))
@@ -309,10 +309,10 @@ final class Companion: NSObject, NSApplicationDelegate {
         sizes.submenu = submenu; menu.addItem(sizes)
         menu.addItem(menuItem("回到主屏幕右下角", #selector(resetPosition)))
         menu.addItem(.separator())
-        menu.addItem(menuItem("打开 DSH 控制台", #selector(openConsole)))
-        menu.addItem(menuItem(serviceStarting ? "正在启动 DSH…" : "启动 / 检查 DSH 服务", #selector(ensureService)))
+        menu.addItem(menuItem("打开 guang harness", #selector(openConsole)))
+        menu.addItem(menuItem(serviceStarting ? "正在启动 GH…" : "启动 / 检查 GH 服务", #selector(ensureService)))
         menu.addItem(menuItem("形象来源与署名", #selector(credits)))
-        menu.addItem(.separator()); menu.addItem(menuItem("退出鲸鱼娘（DSH 继续运行）", #selector(quit)))
+        menu.addItem(.separator()); menu.addItem(menuItem("退出鲸鱼娘（GH 继续运行）", #selector(quit)))
         return menu
     }
     func refreshMenu() { status?.menu = makeMenu() }
@@ -341,7 +341,7 @@ final class Companion: NSObject, NSApplicationDelegate {
     @objc func feed() { celebratingUntil = Date().addingTimeInterval(4); say("白饭！最喜欢鱼片啦～ 🍚"); refreshMenu() }
     @objc func toggleSleep() {
         defaults.set(!sleeping, forKey: "sleeping")
-        say(sleeping ? "我眯一会儿，DSH 后台任务照常运行哦。" : "醒啦，继续陪你工作！")
+        say(sleeping ? "我眯一会儿，GH 后台任务照常运行哦。" : "醒啦，继续陪你工作！")
         refreshMenu(); view.needsDisplay = true
     }
     @objc func toggleVisibility() {
@@ -357,9 +357,9 @@ final class Companion: NSObject, NSApplicationDelegate {
     func startService(openWhenReady: Bool) {
         openAfterStart = openAfterStart || openWhenReady
         guard !serviceStarting else { return }
-        guard let root = projectRoot else { say("找不到项目路径，请重新构建 DSH 应用。"); return }
+        guard let root = projectRoot else { say("找不到项目路径，请重新构建 guang harness 应用。"); return }
         let script = root.appendingPathComponent("scripts/local-superagent")
-        guard FileManager.default.isExecutableFile(atPath: script.path) else { say("找不到 DSH 启动脚本，请检查项目目录。"); return }
+        guard FileManager.default.isExecutableFile(atPath: script.path) else { say("找不到 GH 启动脚本，请检查项目目录。"); return }
         serviceStarting = true; refreshMenu()
         let process = Process()
         process.executableURL = script; process.arguments = ["start"]
@@ -385,14 +385,14 @@ final class Companion: NSObject, NSApplicationDelegate {
                 self.readState()
                 if [0, 2, 3].contains(process.terminationStatus) {
                     if shouldOpen { NSWorkspace.shared.open(self.consoleURL(root: root)) }
-                } else { self.say("DSH 启动未完成，请查看 desktop-launch.log。菜单里可以重试。") }
+                } else { self.say("GH 启动未完成，请查看 desktop-launch.log。菜单里可以重试。") }
             }
         }
         serviceProcess = process
         do { try process.run() }
         catch {
             try? output.close(); serviceProcess = nil; serviceStarting = false; openAfterStart = false
-            refreshMenu(); say("无法启动 DSH，请查看应用旁的项目目录。")
+            refreshMenu(); say("无法启动 GH，请查看应用旁的项目目录。")
         }
     }
     func consoleURL(root: URL) -> URL {
@@ -453,7 +453,7 @@ final class Companion: NSObject, NSApplicationDelegate {
                     self.runtime = value
                     if before > 0 && value.load.running == 0 && !self.sleeping {
                         self.celebratingUntil = Date().addingTimeInterval(3)
-                        self.say("这轮忙完啦，可以去 DSH 看看工单结果。")
+                        self.say("这轮忙完啦，可以去 GH 看看任务结果。")
                     }
                 }
                 self.view.setAccessibilityValue(self.displayMood.label)

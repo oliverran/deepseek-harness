@@ -69,9 +69,10 @@ export function Pill({ active, onClick, children }: { active: boolean; onClick: 
     onClick={onClick}>{children}</button>
 }
 
-function walk<V extends string>(event: KeyboardEvent, values: readonly V[], value: V, onChange: (next: V) => void) {
+function walk<V extends string>(event: KeyboardEvent, values: readonly V[], value: V, onChange: (next: V) => void, orientation: 'horizontal' | 'vertical' = 'horizontal') {
   const index = values.indexOf(value)
-  const steps: Record<string, number> = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: values.length - 1 }
+  const steps: Record<string, number> = { [orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight']: index + 1,
+    [orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft']: index - 1, Home: 0, End: values.length - 1 }
   const next = steps[event.key]
   if (next === undefined) return
   event.preventDefault()
@@ -80,10 +81,10 @@ function walk<V extends string>(event: KeyboardEvent, values: readonly V[], valu
   const list = event.currentTarget as HTMLElement
   requestAnimationFrame(() => list.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')?.focus())
 }
-interface TabItem<V extends string> { value: V; label: string; id: string; panelId: string }
+interface TabItem<V extends string> { value: V; label: string; icon?: ReactNode; id: string; panelId: string }
 /** Page-level tab bar that re-emits `onChange` when clicking the active tab so callers can reset to the tab root. */
-export function SegmentedTabs<V extends string>({ items, value, onChange, label, className }: {
-  items: readonly TabItem<V>[]; value: V; onChange: (next: V) => void; label: string; className?: string
+export function SegmentedTabs<V extends string>({ items, value, onChange, label, className, orientation = 'horizontal' }: {
+  items: readonly TabItem<V>[]; value: V; onChange: (next: V) => void; label: string; className?: string; orientation?: 'horizontal' | 'vertical'
 }) {
   const list = useRef<HTMLDivElement>(null)
   const [more, setMore] = useState<'start' | 'end' | 'both'>()
@@ -102,12 +103,12 @@ export function SegmentedTabs<V extends string>({ items, value, onChange, label,
     for (const tab of list.current.children) observer.observe(tab)
     return () => { observer.disconnect() }
   }, [measure, items.length])
-  return <div ref={list} role="tablist" aria-label={label} className={cx('dt-tabs', className)} data-more={more} onScroll={measure}
+  return <div ref={list} role="tablist" aria-label={label} aria-orientation={orientation} className={cx('dt-tabs', className)} data-more={more} onScroll={measure}
     style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }} onKeyDown={event => walk(event,
-      items.map(item => item.value), value, onChange)}>
-    {items.map(item => <button key={item.value} type="button" role="tab" id={item.id} aria-controls={item.panelId}
+      items.map(item => item.value), value, onChange, orientation)}>
+    {items.map(item => <button key={item.value} type="button" role="tab" id={item.id} aria-controls={item.panelId} aria-label={item.label}
       aria-selected={item.value === value}
-      tabIndex={item.value === value ? 0 : -1} className="dt-tab" onClick={() => onChange(item.value)}>{item.label}</button>)}
+      tabIndex={item.value === value ? 0 : -1} className="dt-tab" onClick={() => onChange(item.value)}>{item.icon}<span className="dt-tab-label">{item.label}</span></button>)}
   </div>
 }
 export function SegmentedControl<V extends string>({ options, value, onChange, label, disabled, className }: {

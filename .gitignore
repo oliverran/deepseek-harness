@@ -7,3 +7,4 @@ coverage/
 .dsh-local/
 deploy.local.json
 DSH.app
+guang harness.app

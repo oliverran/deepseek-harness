@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-APP="$ROOT/.artifacts/DSH Whale.app"
+APP="$ROOT/.artifacts/guang harness.app"
 case "${1:-start}" in
   build)
     mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" /tmp/dsh-whale-module-cache
@@ -13,8 +13,8 @@ case "${1:-start}" in
     printf '%s\n' "$ROOT" > "$APP/Contents/Resources/project-root.txt"
     codesign --force --deep --sign - "$APP"
     "$APP/Contents/MacOS/DSHWhale" --self-test
-    if [ ! -e "$ROOT/DSH.app" ] && [ ! -L "$ROOT/DSH.app" ]; then
-      ln -s '.artifacts/DSH Whale.app' "$ROOT/DSH.app"
+    if [ ! -e "$ROOT/guang harness.app" ] && [ ! -L "$ROOT/guang harness.app" ]; then
+      ln -s '.artifacts/guang harness.app' "$ROOT/guang harness.app"
     fi
     ;;
   start)

@@ -128,7 +128,7 @@ it('lists the settings groups stages first, opens each stage\'s group from its s
   async () => {
   await mount()
   await click(tab(zh['tab.settings']))
-  expect(all('.dt-settings-link').map(link => link.textContent)).toEqual(['账号与仓库', '接单规则', '执行与交付', '高级设置'])
+  expect(all('.dt-settings-link').map(link => link.textContent)).toEqual(['账号与仓库', '接单规则', '执行与交付', '高级设置', '外观'])
   expect(document.querySelector('.dt-settings-link[aria-current="page"]')?.textContent).toBe(zh['settingsGroup.source'])
   for (const page of ['source', 'eval', 'execution'] as const) {
     await click(tab(zh[page === 'execution' ? 'tab.execution' : 'tab.trigger']))

@@ -11,6 +11,7 @@ import type { PluginConfigViewProps } from '@deepseek-ai/dsh-client-ui-plugin-ma
 import type { ISessions } from '@deepseek-ai/dsh-api-session-controller/client'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import { openKnownSession, SessionNavigationError } from '../navigation.ts'
+import { installTheme } from './appearance.tsx'
 import { App } from './app.tsx'
 import { PluginConfig, usePageForm } from './deployment.tsx'
 import { en, zh } from './locales.ts'
@@ -23,8 +24,10 @@ const PANEL_ID = 'dsh-superagent' as MainPanelId
 const ENTRY = 'dsh-superagent'
 
 function HammerIcon({ size }: SidebarPanelIconOwnerProps) {
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-    <path d="M6 3.5h9l3.5 1.75v2.5L15 9.5H6a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z" /><path d="M10 9.5v10.25a1.75 1.75 0 0 0 3.5 0V9.5" /><path d="M10 15.5h3.5" />
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <rect x="1" y="1" width="22" height="22" rx="6" fill="currentColor" opacity=".08" />
+    <path d="M10.5 8H7.8C6 8 5 9.5 5 12s1 4 2.8 4h2.7v-4H8M14 8v8M19 8v8M14 12h5"
+      stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 }
 
@@ -49,6 +52,7 @@ function Mounted({ ctx, t }: { ctx: ClientContext; t: T }) {
 export const inject = ['slots', 'locale', 'sessions', 'uiWorkspace']
 /** Registers the panel, sidebar icon, and Plugin Manager config view; `configForms` is optional (without it, machine settings are read-only). */
 export function apply(ctx: ClientContext): void {
+  ctx.effect(installTheme, 'guang-harness: appearance preferences')
   // Profile-local visual layer, removed along with the plugin; no persisted host theme changes.
   ctx.effect(() => {
     const root = document.documentElement

@@ -1,5 +1,6 @@
 /** Root panel shell: header with global search and glossary, top-level navigation tabs, and active route view. */
 import { useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { useTheme } from './appearance.tsx'
 import type { SearchView } from './api.ts'
 import { Button, Dot, Icon, Input, Modal, SegmentedTabs } from './controls.tsx'
 import type { DeploymentForm } from './deployment.tsx'
@@ -127,7 +128,7 @@ function Header({ masterId }: { masterId: string | undefined }) {
       failure => { if (request === latest.current) notify(errorText(failure)) })
   }
   return <header className="dt-head">
-    <div className="dt-head-title"><h1 className="dt-title">{t('title')}</h1></div>
+    <div className="dt-head-title"><span className="gh-mobile-mark" aria-hidden="true">GH</span><h1 className="dt-title">{t('title')}</h1></div>
     <div className="dt-toolbar">
       <form ref={search} className="dt-search" role="search" onSubmit={submit} onKeyDown={event => { if (event.key === 'Escape') show() }}>
         <Input type="search" icon={<Icon name="search" />} value={query} placeholder={t('searchPlaceholder')} aria-label={t('searchLabel')}
@@ -154,7 +155,8 @@ function Header({ masterId }: { masterId: string | undefined }) {
 
 function Pages({ route, openTab, deploymentForm }: { route: Route; openTab: (tab: Tab) => void; deploymentForm: DeploymentForm }) {
   const { t, navigate } = usePanel()
-  const { state, error, reload } = usePanelData()
+  const { state, setup, error, reload } = usePanelData()
+  const theme = useTheme()
   // Keep the active tab scrolled into view on narrow screens when routes change via links.
   useEffect(() => { document.getElementById(`dt-tab-${topTab(route)}`)?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' }) }, [route.page])
   const waiting = error ? <p className="dt-error" role="alert">{error.message}</p> : <p className="dt-hint">{t('loading')}</p>
@@ -172,12 +174,25 @@ function Pages({ route, openTab, deploymentForm }: { route: Route; openTab: (tab
         deploymentForm={deploymentForm} /> : waiting
     }
   })()
-  return <div className="dt-page">
+  return <div className="gh-root"><div className="dt-page" data-gh-theme={theme}>
+    <aside className="gh-sidebar" aria-label={t('brandNavigation')}>
+      <div className="gh-brand"><span className="gh-monogram" aria-hidden="true">GH</span>
+        <div><strong>guang harness</strong><span>GUANG SERIES</span></div></div>
+      <SegmentedTabs className="dt-tabs gh-navigation" label={t('pagesLabel')} value={topTab(route)} onChange={openTab}
+        orientation="vertical"
+        items={TABS.map(value => ({ value, label: t(`tab.${value}`), icon: <Icon name={value === 'overview' ? 'inbox'
+          : value === 'execution' ? 'queue' : value === 'trigger' ? 'message' : 'settings'} />, id: `dt-tab-${value}`, panelId: 'dt-page' }))} />
+      <div className="gh-sidebar-project"><span>{t('workspaceRepository')}</span>
+        <strong>{setup?.accounts?.repository ?? t('empty')}</strong>
+        <button type="button" className="dt-textlink" onClick={() => navigate({ page: 'source' })}>{t('workspaceConnection')}</button></div>
+      <div className="gh-sidebar-footer"><span className="gh-account-mark" aria-hidden="true">{(setup?.accounts?.agent ?? 'G')[0]?.toUpperCase()}</span>
+        <div><strong>{setup?.accounts?.agent ?? 'guang harness'}</strong><span>{t(error ? 'connectionOffline' : state ? 'connectionOnline' : 'loading')}</span></div>
+        <button type="button" className="gh-appearance-shortcut" aria-label={t('appearanceTitle')}
+          onClick={() => navigate(settingsRoute('appearance'))}><Icon name="settings" size={17} /></button></div>
+    </aside>
     <div className="dt-column">
       <Header masterId={state?.masterId} />
       {error && state && <p className="dt-error" role="status">{error.message}</p>}
-      <SegmentedTabs className="dt-tabs" label={t('pagesLabel')} value={topTab(route)} onChange={openTab}
-        items={TABS.map(value => ({ value, label: t(`tab.${value}`), id: `dt-tab-${value}`, panelId: 'dt-page' }))} />
       <main id="dt-page" role="tabpanel" aria-labelledby={`dt-tab-${topTab(route)}`} className="dt-main">
         {topTab(route) === 'trigger' && !route.id && <nav className="dt-record-nav" aria-label={t('recordsViews')}>
           {(['trigger', 'eval', 'source'] as const).map(value => <button key={value} type="button"
@@ -186,12 +201,16 @@ function Pages({ route, openTab, deploymentForm }: { route: Route; openTab: (tab
         </nav>}
         {page}</main>
     </div>
-  </div>
+  </div></div>
 }
 
 /** Root panel component managing route history and shared panel state. */
 export function App({ t, openSession, deploymentForm }: AppProps) {
   const [location, setLocation] = useState(initialLocation)
+  useEffect(() => {
+    const previous = document.title; document.title = 'guang harness · GH'
+    return () => { if (document.title === 'guang harness · GH') document.title = previous }
+  }, [])
   useEffect(() => { remember(location) }, [location])
   // Preserve the last opened settings group across navigation so the Settings tab reopens at it.
   const move = useCallback((next: (current: Location) => Pick<Location, 'route' | 'stack'>) =>

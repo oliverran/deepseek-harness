@@ -1,6 +1,10 @@
 # 005 Panel
 
-Open **Superagent** in the DeepSeek Harness Web sidebar to supervise the agent. The panel prioritizes work that needs a person, then system health and history. This document builds on [000 Philosophy](000-philosophy.md) through [004 Prompts](004-prompts.md).
+Open **guang harness** in the DeepSeek Harness Web sidebar to supervise the agent. The panel prioritizes work that needs a person, then system health and history. This document builds on [000 Philosophy](000-philosophy.md) through [004 Prompts](004-prompts.md).
+
+## Appearance and brand
+
+The interface uses the guang harness (GH) name, part of the GUANG series with guangcode. A vertical sidebar holds the four primary views and collapses to accessible icon buttons in narrow panes. Settings → Appearance offers Minimal light, Warm paper and Graphite focus. The choice applies immediately to the shell and portal controls, persists in this browser, and synchronizes across same-origin tabs without an agent configuration write or restart. Plugin identifiers, profiles, credential locations and the desktop bundle identifier remain stable.
 
 ## Three questions
 
@@ -45,7 +49,7 @@ Ticket details show the originating Trigger, Decision and reason, scope and Poli
 
 ## Whale-girl companion
 
-The whale-girl companion now runs only as the small native macOS desktop app. The browser no longer registers a character overlay or collapsed whale launcher, so reopening the sidebar cannot restore a second character. Open `DSH.app` in the project root to start or reuse the local DSH service, open its authenticated console and show the desktop companion. The menu-bar whale controls visibility, size, rest, service startup and quit. Quitting the companion leaves the background DSH service running. Logging out or restarting the Mac requires opening the app again; it is not installed as a login item.
+The whale-girl companion now runs only as the small native macOS desktop app. The browser no longer registers a character overlay or collapsed whale launcher, so reopening the sidebar cannot restore a second character. Open `guang harness.app` in the project root to start or reuse the local DSH service, open its authenticated console and show the desktop companion. The menu-bar whale controls visibility, size, rest, service startup and quit. Quitting the companion leaves the background DSH service running. Logging out or restarting the Mac requires opening the app again; it is not installed as a login item.
 
 The companion reads Superagent worker load and health, not every ordinary Harness chat. A brief celebration after a worker round does not certify a PR as successful. Feeding/resting does not call a model, send a GitHub message or pause work. See `desktop-pet/README.md` for operation details and `assets/whale-pet-ATTRIBUTION.md` for the generated sprite's separate noncommercial share-alike artwork license.
 

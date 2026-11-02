@@ -1,8 +1,8 @@
-# DSH Superagent · 个人工作台
+# guang harness · GH
 
-<img src="assets/dsh-app-icon.png" alt="DSH 鲸鱼娘应用图标" width="96" />
+<img src="assets/dsh-app-icon.png" alt="guang harness 鲸鱼娘应用图标" width="96" />
 
-基于 [deepseek-ai/dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) 定制的 Superagent：通过 GitHub 下任务，在本地后台执行，用 Web 工作台跟进，并提供 macOS 桌面鲸鱼娘与应用入口。
+基于 [deepseek-ai/dsh-superagent-prototype](https://github.com/deepseek-ai/dsh-superagent-prototype) 定制的 **guang harness**（简称 **GH**），与 [guangcode](https://github.com/oliverran/guang-code) 同属 GUANG 系列：通过 GitHub 下任务，在本地后台执行，用 Web 工作台跟进，并提供 macOS 桌面鲸鱼娘与应用入口。
 
 > 这是社区定制的研究原型，不是 DeepSeek 官方产品，也不等同于官方文章中的完整设计。使用前请审阅权限、执行命令与接单规则；部分文章中描述的能力尚未实现。
 
@@ -15,7 +15,7 @@
 - **任务并行与持续跟进**：按配置的容量并行执行；在原 Issue 或 PR 中追加请求，可继续关联任务。是否接受仍由权限与接单规则决定。
 - **工作台重组**：以待处理事项、任务进展和结果为中心，保留搜索、重新评估、重试、停止与设置历史。
 - **macOS 桌面伴侣**：全局悬浮、跨桌面显示的紧凑鲸鱼娘，支持悬停、拖动、落地动效，以及喂食、休息、隐藏和尺寸调整。
-- **DSH.app 入口**：启动或复用本地后台服务，打开控制台并显示桌面伴侣；提供独立应用图标。
+- **guang harness.app 入口**：启动或复用本地后台服务，打开控制台并显示桌面伴侣；提供独立应用图标。
 
 ## 四个栏目怎么用
 
@@ -27,6 +27,18 @@
 | **设置** | 「账号与仓库」「接单规则」「执行与交付」「高级设置」；完整提示词位于高级设置中 |
 
 任务处于「等待新触发」表示等待后续消息，不代表已完成；关联 PR 也不代表已合并。状态以任务记录和实际交付为准。
+
+## 三款主题
+
+在 **设置 → 外观** 中切换主题，点击立即生效，自动保存于当前浏览器的本机存储，刷新或重新打开后仍保留；同源浏览器标签页会同步主题。
+
+| 主题 | 风格 |
+| --- | --- |
+| **极简浅色** | 黑白灰与细分隔线，突出任务和结果 |
+| **温暖纸色** | 暖纸底色、石色侧栏与陶土色点缀 |
+| **深色专注** | 石墨灰、柔和的文字和鼠尾草绿点缀 |
+
+三款主题使用相同的侧栏布局；小窗口自动收起导航文字，保留图标和可访问名称。切换主题不改动模型、接单规则或后台运行状态。品牌名称更新后，底层 `dsh-superagent` 插件标识、已有 profile、数据目录与应用 bundle identifier 保留，已有会话和宠物偏好无需迁移。
 
 ## 用 oliverran 给自己下任务
 
@@ -95,7 +107,7 @@ scripts/desktop-pet build
 scripts/desktop-pet start
 ```
 
-构建会生成 `.artifacts/DSH Whale.app` 和项目根目录的 `DSH.app` 快捷入口，并运行 16 项原生自检。双击应用会检查并启动服务、打开控制台、显示桌面伴侣。可将构建出的完整 `.app` 复制到「应用程序」或桌面；应用记录构建时的项目位置，移动源码目录后需重新构建并替换应用。
+构建会生成 `.artifacts/guang harness.app` 和项目根目录的 `guang harness.app` 快捷入口，并运行 16 项原生自检。双击应用会检查并启动服务、打开控制台、显示桌面伴侣。可将构建出的完整 `.app` 复制到「应用程序」或桌面；应用记录构建时的项目位置，移动源码目录后需重新构建并替换应用。
 
 - 悬停打招呼，拖动时切换姿态，松开后播放落地动效；双击喂食，单击或右键打开菜单。
 - 菜单栏鲸鱼支持恢复显示、尺寸调整、休息与唤醒、服务启动检查和退出。
@@ -115,7 +127,7 @@ pnpm build
 pnpm check
 ```
 
-本次工作台改版已通过类型检查、构建及 **1207 项测试**。测试中的本地模拟服务需要允许监听回环端口；代理环境应将 `127.0.0.1` 与 `localhost` 加入 `NO_PROXY`。
+本次工作台改版已通过类型检查、构建及回归测试。测试中的本地模拟服务需要允许监听回环端口；代理环境应将 `127.0.0.1` 与 `localhost` 加入 `NO_PROXY`。
 
 ## 文档
 
@@ -133,6 +145,6 @@ pnpm check
 
 ## 数据与许可
 
-Git 仓库排除了 `.env`、`.dsh-local/`、`.runtime/`、`.artifacts/`、`deploy.local.json`、`node_modules/`、`lib/` 和生成的 `DSH.app`。这些目录可能包含凭证、会话或机器配置，迁移时需单独配置，不要提交到 GitHub。
+Git 仓库排除了 `.env`、`.dsh-local/`、`.runtime/`、`.artifacts/`、`deploy.local.json`、`node_modules/`、`lib/` 和生成的 `guang harness.app`。这些目录可能包含凭证、会话或机器配置，迁移时需单独配置，不要提交到 GitHub。
 
 代码使用 [MIT 许可证](LICENSE)。鲸鱼娘精灵、图标及其衍生美术使用单独的 **CC BY-NC-SA 4.0** 许可，需署名、仅限非商业使用并以相同许可分享；不适用代码的 MIT 许可。来源与角色署名见 [美术说明](assets/whale-pet-ATTRIBUTION.md)。

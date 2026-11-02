@@ -432,6 +432,7 @@ class Reply extends Response {
 export function usePanelServer(cleanup: () => void) {
   beforeEach(() => {
     sessionStorage.clear()
+    localStorage.clear()
     server = initial()
     vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit): Promise<Response> => {
       if (server.down) return new Response(null, { status: 404 })

@@ -62,6 +62,8 @@ export function OverviewPage() {
   const { t, call, navigate } = usePanel()
   const { setup } = usePanelData()
   const { data, error, reload } = usePoll(() => call('GET overview'), [])
+  const active = usePoll(() => call('GET tickets', { query: { state: 'open', limit: 5 } }), [])
+  const recent = usePoll(() => call('GET tickets', { query: { state: 'ended', limit: 3 } }), [])
   if (!data) return <LoadState error={error} loading />
   const stat = (label: string, value: ReactNode, route?: Route) => <span className="dt-stat">
     <span className="dt-stat-label">{label}</span>
@@ -88,6 +90,16 @@ export function OverviewPage() {
     {data.problems.length > 0 && <Section title={t('problems')} count={data.problems.length}>
       <ul className="dt-list dt-cards">{data.problems.map((problem, index) => <ProblemLine key={index} problem={problem}
         onChanged={reload} />)}</ul>
+    </Section>}
+    <Section title={t('workspaceActive')} action={more({ page: 'execution' })}>
+      {active.error && <LoadState error={active.error} loading={false} />}
+      {!active.data ? <Hint>{t('loading')}</Hint> : active.data.items.filter(ticket => ticket.stage !== 'person').length
+        ? <ul className="dt-list">{active.data.items.filter(ticket => ticket.stage !== 'person').map(ticket =>
+          <TicketLine key={ticket.id} ticket={ticket} />)}</ul> : <Hint>{t('workspaceNoActive')}</Hint>}
+    </Section>
+    {!!recent.data?.items.length && <Section title={t('workspaceRecent')}
+      action={more({ page: 'execution', query: { filter: 'ended' } })}>
+      <ul className="dt-list">{recent.data.items.map(ticket => <TicketLine key={ticket.id} ticket={ticket} />)}</ul>
     </Section>}
     <Section title={t('lastDay')} action={more({ page: 'trigger', query: { filter: 'recent' } })}>
       {/* Received and evaluated counts operate on Triggers rather than Threads or Decisions, so they do not link to filtered views. */}

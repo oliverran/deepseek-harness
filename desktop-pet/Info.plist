@@ -3,10 +3,10 @@
 <plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>DSHWhale</string>
 <key>CFBundleIdentifier</key><string>local.dsh.whale-pet</string>
-<key>CFBundleName</key><string>DSH 鲸鱼娘</string>
-<key>CFBundleDisplayName</key><string>DSH 鲸鱼娘</string>
+<key>CFBundleName</key><string>guang harness</string>
+<key>CFBundleDisplayName</key><string>guang harness</string>
 <key>CFBundleIconFile</key><string>AppIcon</string>
-<key>CFBundleVersion</key><string>2</string>
+<key>CFBundleVersion</key><string>3</string>
 <key>CFBundleShortVersionString</key><string>1.0</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>LSUIElement</key><true/>

@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+export DSH_HOME="$ROOT/.dsh-local"
+export PATH="$ROOT/.runtime/node_modules/.bin:/opt/homebrew/bin:$PATH"
+export NO_PROXY="127.0.0.1,localhost${NO_PROXY:+,$NO_PROXY}"
+export no_proxy="$NO_PROXY"
+export HTTPS_PROXY="${DSH_SUPERAGENT_PROXY:-http://127.0.0.1:51926}"
+export HTTP_PROXY="$HTTPS_PROXY"
+exec python3 "$ROOT/scripts/dsh-superagent" "$@"

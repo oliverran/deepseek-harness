@@ -1,0 +1,25 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+APP="$ROOT/.artifacts/DSH Whale.app"
+case "${1:-start}" in
+  build)
+    mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources" /tmp/dsh-whale-module-cache
+    swiftc -swift-version 5 -O -module-cache-path /tmp/dsh-whale-module-cache "$ROOT/desktop-pet/main.swift" -framework AppKit -o "$APP/Contents/MacOS/DSHWhale"
+    cp "$ROOT/desktop-pet/Info.plist" "$APP/Contents/Info.plist"
+    cp "$ROOT/desktop-pet/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
+    cp "$ROOT/src/client/pet-sprite.png" "$APP/Contents/Resources/pet-sprite.png"
+    cp "$ROOT/assets/whale-pet-ATTRIBUTION.md" "$APP/Contents/Resources/ATTRIBUTION.md"
+    printf '%s\n' "$ROOT" > "$APP/Contents/Resources/project-root.txt"
+    codesign --force --deep --sign - "$APP"
+    "$APP/Contents/MacOS/DSHWhale" --self-test
+    if [ ! -e "$ROOT/DSH.app" ] && [ ! -L "$ROOT/DSH.app" ]; then
+      ln -s '.artifacts/DSH Whale.app' "$ROOT/DSH.app"
+    fi
+    ;;
+  start)
+    [ -x "$APP/Contents/MacOS/DSHWhale" ] || "$0" build
+    open "$APP"
+    ;;
+  *) echo 'Usage: scripts/desktop-pet [build|start]' >&2; exit 2 ;;
+esac

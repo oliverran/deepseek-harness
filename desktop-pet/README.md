@@ -1,0 +1,17 @@
+# DSH desktop companion (macOS)
+
+An independent transparent AppKit panel that stays above application windows and joins all desktop Spaces, including full-screen Spaces. The application runs without a Dock icon and has a whale menu-bar item. It does not require Accessibility, Screen Recording or Input Monitoring permission to operate.
+
+Open `DSH.app` in the project root (a shortcut to `.artifacts/DSH Whale.app`). The app starts or reuses the existing DSH service in tmux, then opens its authenticated console in the browser and displays the single native companion. Reopening an already running app also checks the service and opens the console; it never creates another service instance. The native menu has a separate start/check action. Startup logs go to `.artifacts/desktop-launch.log`.
+
+Both processes continue after the terminal or browser closes. Quitting the companion leaves the tmux service running. The app does not install a login item: reopen `DSH.app` after logging out or restarting the Mac. The machine must remain awake for tasks to execute, and network-dependent tasks still need the configured Clash proxy. The app refers to the original project directory saved at build time; rebuild after relocating that directory. A failed startup leaves an actionable message and a log instead of creating duplicate instances. The old web character/launcher is no longer registered, preventing duplicate pets when the sidebar is toggled.
+
+The default character is approximately 98 points tall (92 points wide), about 62% of the original size. The size submenu offers mini, compact (default) and large; the choice is remembered locally. The status badge stays hidden while idle and appears on hover or when working/attention is needed.
+
+Hover to greet the character: it lifts slightly, leans toward the cursor and shows a sparkle. Pressing gives a small squash; dragging uses a raised-hands pose, a closed-hand cursor, stretch and directional sway. Release produces a damped landing bounce. Click/right-click for the native menu; a click also shows a short heart, and double-click feeds rice. The menu offers rest/wake, hide/show, always-on-top, return to the main display, the DSH console, credits and quit. The menu-bar whale restores a hidden companion. Position and sleep/visibility preferences are stored in this app's UserDefaults domain. Hiding or resting never pauses an agent. System Reduce Motion disables movement effects.
+
+The companion polls only the loopback Superagent state endpoint on port 3082 every five seconds, with proxy bypass and a timeout. It shows worker activity, queued/paused state, setup problems, runtime errors and disconnection. This tracks Superagent work, not arbitrary Harness chats. A brief celebration after a worker round does not certify a PR as successful. DSH can be closed or offline while the pet stays on the desktop and shows disconnected state.
+
+Use `退出鲸鱼娘` in its menu to stop it. Rebuild with `scripts/desktop-pet build` after source changes, then quit and reopen the app. Build artifacts are locally ad-hoc signed; no third-party binary downloads are required. Sixteen built-in checks run during the build, covering state, size, screen bounds, hover/drag/landing poses and Reduce Motion.
+
+Artwork credits and the separate CC BY-NC-SA 4.0 artwork license are in `assets/whale-pet-ATTRIBUTION.md` and bundled in the app's Resources directory.

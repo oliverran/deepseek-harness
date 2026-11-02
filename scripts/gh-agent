@@ -1,0 +1,8 @@
+#!/bin/sh
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+export GH_CONFIG_DIR="$ROOT/.dsh-local/gh-agent"
+export HTTPS_PROXY="${DSH_SUPERAGENT_PROXY:-http://127.0.0.1:51926}"
+export HTTP_PROXY="$HTTPS_PROXY"
+export NO_PROXY="127.0.0.1,localhost${NO_PROXY:+,$NO_PROXY}"
+export no_proxy="$NO_PROXY"
+exec /opt/homebrew/bin/gh "$@"

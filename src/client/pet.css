@@ -1,0 +1,39 @@
+/* Only the companion's bounds take pointer input; the rest of the shell overlay remains click-through. */
+.whale-pet { position: fixed; width: 148px; height: 200px; z-index: 80; pointer-events: none; user-select: none; font: 12px/1.6 system-ui, sans-serif; color: #243454; }
+.whale-character { position: relative; display: block; width: 148px; height: 170px; padding: 0; margin: 0; border: 0; background: none; cursor: grab; pointer-events: auto; touch-action: none; -webkit-tap-highlight-color: transparent; border-radius: 24px; }
+.whale-character:active { cursor: grabbing; }
+.whale-character:focus-visible { outline: 2px solid #6483ef; outline-offset: 3px; }
+.whale-sprite { position: relative; display: block; width: 148px; height: 156px; background-size: 296px 296px; background-repeat: no-repeat; filter: drop-shadow(0 7px 5px #214d8620); transform-origin: 50% 90%; animation: whale-breathe 3.6s ease-in-out infinite; z-index: 1; }
+.whale-character:is([data-mood='happy'], [data-mood='sleeping'], [data-mood='offline']) .whale-sprite { clip-path: inset(9px 0 0 0); }
+.whale-character[data-mood='working'] .whale-sprite { animation: whale-work 1.8s ease-in-out infinite; }
+.whale-character[data-mood='happy'] .whale-sprite { animation: whale-hop .65s ease-in-out infinite; }
+.whale-character[data-mood='sleeping'] .whale-sprite { animation-duration: 5.5s; }
+.whale-character[data-mood='offline'] .whale-sprite { filter: saturate(.55) drop-shadow(0 7px 5px #214d8620); }
+.whale-ground { position: absolute; width: 82px; height: 12px; bottom: 17px; left: 33px; border-radius: 50%; background: radial-gradient(ellipse, #607ee330, #8bbce000 72%); }
+.whale-status { display: flex; align-items: center; justify-content: center; gap: 6px; width: max-content; max-width: 148px; box-sizing: border-box; margin: -9px auto 0; padding: 3px 10px; border: 1px solid #9cb5ef45; border-radius: 20px; background: #f9fbfff0; box-shadow: 0 3px 15px #3e5e9e0e; color: #506387; font-size: 10px; letter-spacing: .3px; pointer-events: none; }
+.whale-status i { width: 5px; height: 5px; border-radius: 50%; background: #59b6a4; }
+.whale-status[data-mood='working'] i { background: #6887f5; box-shadow: 0 0 6px #6887f580; }
+.whale-status[data-mood='alert'] i, .whale-status[data-mood='offline'] i { background: #ed9c50; }
+.whale-bubble { position: fixed; box-sizing: border-box; width: 224px; padding: 12px 15px; border: 1px solid #b8cef180; border-radius: 16px 16px 5px 16px; background: #f8fbfff5; color: #425478; box-shadow: 0 8px 30px #30477b18; animation: whale-appear 180ms ease-out; pointer-events: none; }
+.whale-menu { position: fixed; box-sizing: border-box; width: 264px; max-width: calc(100vw - 16px); max-height: calc(100vh - 24px); overflow: auto; padding: 16px; border: 1px solid #b7c9ee90; border-radius: 20px; background: #f8fbfffa; color: #243454; box-shadow: 0 16px 50px #213f7b26; backdrop-filter: blur(16px); pointer-events: auto; animation: whale-appear 180ms ease-out; user-select: text; z-index: 2; }
+.whale-menu-head { display: flex; align-items: center; justify-content: space-between; }
+.whale-menu-head strong { font-size: 14px; letter-spacing: .6px; }
+.whale-menu button { cursor: pointer; font: inherit; color: inherit; }
+.whale-menu-head button { width: 28px; height: 28px; border: 0; border-radius: 8px; background: #7493e510; font-size: 20px; }
+.whale-menu p { margin: 10px 0 14px; font-size: 12px; color: #647594; }
+.whale-menu-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.whale-menu-actions button { border: 1px solid #c4d3ef; padding: 8px 5px; border-radius: 10px; background: #fff; font-size: 11px; }
+.whale-menu-actions button:hover { background: #ebf1ff; border-color: #88a5ec; }
+.whale-menu-actions button:last-child { grid-column: 1 / -1; }
+.whale-menu button:focus-visible, .whale-credit summary:focus-visible { outline: 2px solid #6687ed; outline-offset: 2px; }
+.whale-credit { margin-top: 12px; font-size: 10px; color: #7c8cab; }
+.whale-credit summary { cursor: pointer; }
+.whale-credit a { color: #4f70ce; }
+.whale-launcher { position: fixed; right: 22px; bottom: 96px; z-index: 80; width: 42px; height: 42px; border: 1px solid #adbfed; border-radius: 15px; background: #f4f8ffed; box-shadow: 0 4px 20px #30477b16; cursor: pointer; font-size: 23px; pointer-events: auto; }
+.whale-launcher:focus-visible { outline: 2px solid #6483ef; outline-offset: 3px; }
+@keyframes whale-breathe { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-4px) rotate(1deg); } }
+@keyframes whale-work { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-2px) rotate(1deg); } }
+@keyframes whale-hop { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-10px) rotate(-3deg); } }
+@keyframes whale-appear { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .whale-sprite, .whale-bubble, .whale-menu { animation: none !important; } }
+@media (prefers-reduced-transparency: reduce) { .whale-menu, .whale-bubble { background: #f8fbff; backdrop-filter: none; } }

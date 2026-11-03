@@ -1,6 +1,6 @@
 # Whale-girl companion artwork
 
-`src/client/pet-sprite.png` and `assets/dsh-app-icon.png` are AI-generated derivatives made with ImageGen for this local DSH companion. The app icon is based on the generated sprite's character identity and packaged as `desktop-pet/AppIcon.icns`. Reference: [Q-version character sheet](https://iphsiibl.github.io/deepseek-whale-girl-gallery/sheets/01-chibi-character-sheet.png), from the [gallery](https://iphsiibl.github.io/deepseek-whale-girl-gallery/) maintained by iphsiibl, citing the TreapGoGo community resource library.
+`src/client/pet-sprite.png`, `assets/dsh-app-icon.png` and its resized welcome-logo variant `assets/whale-girl-logo.png` are AI-generated derivatives made with ImageGen for this local DSH companion. The app icon is based on the generated sprite's character identity and packaged as `desktop-pet/AppIcon.icns`. Reference: [Q-version character sheet](https://iphsiibl.github.io/deepseek-whale-girl-gallery/sheets/01-chibi-character-sheet.png), from the [gallery](https://iphsiibl.github.io/deepseek-whale-girl-gallery/) maintained by iphsiibl, citing the TreapGoGo community resource library.
 
 Character credits: 上善无形 — original character 溟月; ZipZipPipe — whale-girl maid adaptation; TreapGoGo/community — reference character sheet. This is an unofficial community character, not an official DeepSeek asset.
 

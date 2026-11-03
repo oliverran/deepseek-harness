@@ -4,7 +4,7 @@ Open **Superagent** in the DeepSeek Harness Web sidebar to supervise the agent. 
 
 ## Appearance and brand
 
-The application shell uses the guang harness (GH) identity, part of the GUANG series with guangcode. The sidebar brand slots and browser product-title suffix apply globally, including ordinary chats. The Superagent feature panel keeps its name and hammer icon. A vertical sidebar holds the four primary views and collapses to accessible icon buttons in narrow panes. Settings → Appearance offers Minimal light, Warm paper and Graphite focus. The choice applies immediately to the shell and portal controls, persists in this browser, and synchronizes across same-origin tabs without an agent configuration write or restart. Plugin identifiers, profiles, credential locations and the desktop bundle identifier remain stable.
+The application shell uses the guang harness (GH) identity, part of the GUANG series with guangcode. The sidebar brand slots and browser product-title suffix apply globally, including ordinary chats. The Superagent feature panel keeps its name and hammer icon. The New Session hero uses the existing whale-girl app icon through `conversation.hero.brand.mark`; this is a static logo, not an additional web pet. A vertical sidebar holds the four primary views and collapses to accessible icon buttons in narrow panes. Settings → Appearance offers Minimal light, Warm paper and Graphite focus. The choice applies immediately to the shell and portal controls, persists in this browser, and synchronizes across same-origin tabs without an agent configuration write or restart. Plugin identifiers, profiles, credential locations and the desktop bundle identifier remain stable.
 
 ## Three questions
 

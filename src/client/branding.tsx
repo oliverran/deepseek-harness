@@ -1,4 +1,5 @@
 /** GUANG application identity, independent of the Superagent panel's name and route. */
+import WHALE_LOGO from '../../assets/whale-girl-logo.png?data'
 import type { SidebarBrandMarkOwnerProps } from '@deepseek-ai/dsh-client-ui-sidebar/client'
 
 /** Global application mark shared by the expanded sidebar and collapsed rail. */
@@ -33,4 +34,10 @@ export function installApplicationTitle(): () => void {
     if (!existing && node.textContent === 'guang harness') node.remove()
     else if (document.title.endsWith('guang harness')) document.title = document.title.replace(/guang harness$/, 'DeepSeek Harness')
   }
+}
+
+/** Existing whale-girl app artwork used only in the New Session hero, without mounting another pet. */
+export function WhaleGirlHeroMark({ size, className }: { size: number; className?: string }) {
+  return <img src={WHALE_LOGO} alt="鲸鱼娘" className={className} width={size} height={size}
+    draggable={false} style={{ display: 'block', objectFit: 'contain', borderRadius: Math.max(6, size / 5) }} />
 }

@@ -4,6 +4,7 @@ import type { Context } from '@deepseek-ai/cordis'
 import type { MainPanelId } from '@deepseek-ai/dsh-client-ui-layout/client'
 import type { SidebarPanelIconOwnerProps } from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
+import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-workspace/client'
 import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
@@ -12,7 +13,7 @@ import type { ISessions } from '@deepseek-ai/dsh-api-session-controller/client'
 import type { SessionId } from '@deepseek-ai/dsh-session/types'
 import { openKnownSession, SessionNavigationError } from '../navigation.ts'
 import { installTheme } from './appearance.tsx'
-import { HarnessBrandMark, HarnessBrandName, installApplicationTitle } from './branding.tsx'
+import { HarnessBrandMark, HarnessBrandName, WhaleGirlHeroMark, installApplicationTitle } from './branding.tsx'
 import { App } from './app.tsx'
 import { PluginConfig, usePageForm } from './deployment.tsx'
 import { en, zh } from './locales.ts'
@@ -54,6 +55,7 @@ export function apply(ctx: ClientContext): void {
   ctx.effect(installApplicationTitle, 'guang-harness: application title')
   ctx.slots.inject('sidebar.brand.mark', () => ctx.slots.register({ name: 'sidebar.brand.mark', priority: -10 }, HarnessBrandMark))
   ctx.slots.inject('sidebar.brand.name', () => ctx.slots.register({ name: 'sidebar.brand.name', priority: -10 }, HarnessBrandName))
+  ctx.slots.inject('conversation.hero.brand.mark', () => ctx.slots.register({ name: 'conversation.hero.brand.mark', priority: -10 }, WhaleGirlHeroMark))
   ctx.effect(installTheme, 'guang-harness: appearance preferences')
   // Profile-local visual layer, removed along with the plugin; no persisted host theme changes.
   ctx.effect(() => {

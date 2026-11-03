@@ -53,7 +53,7 @@ afterEach(() => { while (disposers.length) disposers.pop()!(); vi.unstubAllGloba
 
 it('registers a localized main panel, sidebar entry and Plugin Manager row page, and no settings section', () => {
   const { entries, dictionaries, main, nav } = fixture([])
-  expect(entries.map(entry => entry.options.name)).toEqual(['sidebar.brand.mark', 'sidebar.brand.name', 'main', 'sidebar.panellist', 'plugins.row.config'])
+  expect(entries.map(entry => entry.options.name)).toEqual(['sidebar.brand.mark', 'sidebar.brand.name', 'conversation.hero.brand.mark', 'main', 'sidebar.panellist', 'plugins.row.config'])
   expect(entries.some(entry => entry.options.name === 'shell.overlay')).toBe(false)
   expect(entries.find(entry => entry.options.name === 'plugins.row.config')!.options).toMatchObject({ key: 'dsh-superagent#dsh-superagent', locale: 'dshSuperagent' })
   expect(Object.keys(dictionaries)).toEqual(['dshSuperagent'])
@@ -172,4 +172,21 @@ it('keeps the application identity across ordinary session title changes and res
   expect(document.title).toBe('guang harness')
   dispose()
   expect(document.title).toBe('DeepSeek Harness')
+})
+
+
+it('uses the existing whale-girl artwork in the New Session hero without changing the global GH mark', async () => {
+  const { entries, nav } = fixture([])
+  const hero = entries.find(entry => entry.options.name === 'conversation.hero.brand.mark')!
+  expect(hero.options.priority).toBe(-10)
+  const view = await render(hero, { size: 34, className: 'hero-test-mark' })
+  const image = view.container.querySelector('img')!
+  expect(image.alt).toBe('鲸鱼娘')
+  expect(image.width).toBe(34)
+  expect(image.height).toBe(34)
+  expect(image.className).toBe('hero-test-mark')
+  expect(image.getAttribute('src')).toBeTruthy()
+  expect(nav.options.label?.()).toBe('Superagent')
+  expect(entries.some(entry => entry.options.name === 'shell.overlay')).toBe(false)
+  view.dispose()
 })
